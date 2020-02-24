@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //(NewAct)
         btnQr = (Button) findViewById(R.id.btnQR);
         btnQr.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //(NewAct)
     public void openQrActivity(){
         Intent intent = new Intent(this, QrActivity.class);
         startActivity(intent);
