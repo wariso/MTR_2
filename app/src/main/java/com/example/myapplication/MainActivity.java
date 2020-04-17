@@ -17,11 +17,15 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import android.Manifest;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnQr;
     private Button btnGetLoc;
+
+    private TextView txtLat;
+    private TextView txtLong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
 
         //(NewAct)
         btnQr = (Button) findViewById(R.id.btnQR);
+        btnGetLoc = (Button) findViewById(R.id.btnGetLoc);
+        txtLat = (TextView) findViewById(R.id.txtLat);
+        txtLong = (TextView) findViewById(R.id.txtLong);
+
         btnQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -39,24 +47,31 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnGetLoc = (Button) findViewById(R.id.btnGetLoc);
-        btnGetLoc.setOnClickListener(new View.OnClickListener() {
-                                         @Override
-                                         public void onClick(View v) {
-                                             GPSTracker g = new GPSTracker(getApplicationContext());
-                                             Location l = g.getLocation();
-                                             if (l!=null){
-                                                 double lat = l.getLatitude();
-                                                 double lon = l.getLongitude();
-                                                 Toast.makeText(getApplicationContext(), "Latitud: "+lat+" \n Longitud: "+lon,Toast.LENGTH_LONG).show();
+        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
 
-                                             }
-                                         }
-                                     }
+        btnGetLoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GPSTracker g = new GPSTracker(getApplicationContext());
+                Location l = g.getLocation();
+                if (l != null){
+
+                    double lat = l.getLatitude();
+                    double lon = l.getLongitude();
+                    Toast.makeText(getApplicationContext(), "Latitud: "+lat+" \n Longitud: "+lon,Toast.LENGTH_LONG).show();
+
+                    txtLat.setText(Double.toString(lat));
+                    txtLong.setText(Double.toString(lon));
+
+                }else{
+                }
+            }
+        }
         );
 
-
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},123);
+
+
 
 
         FloatingActionButton fab = findViewById(R.id.fab);
