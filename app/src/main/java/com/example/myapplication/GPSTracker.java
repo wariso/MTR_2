@@ -14,12 +14,10 @@ import androidx.core.content.ContextCompat;
 public class GPSTracker implements LocationListener {
     Context context;
 
-    public GPSTracker(Context c){
-        context = c;
+    public GPSTracker(){
+        context = App.getcontext();
 
     }
-
-
 
     public Location getLocation(){
 
@@ -33,8 +31,18 @@ public class GPSTracker implements LocationListener {
 
         boolean isGPSEnabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if(isGPSEnabled){
+            Toast.makeText(context, "GPS esta habilitado", Toast.LENGTH_LONG).show();
             lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 6000, 10, this);
             Location l = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            String res = "";
+            if (l!=null){
+                res = "" + l.getLatitude() + " " + l.getLongitude();
+            }else{
+                res = "N/A";
+            }
+
+            Toast.makeText(context, "coordenadas " + res, Toast.LENGTH_LONG).show();
             return l;
 
         }else{
