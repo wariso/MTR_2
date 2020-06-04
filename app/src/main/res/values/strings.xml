@@ -4,4 +4,13 @@
     <string name="title_activity_qr">QrActivity</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_login">LoginActivity</string>
+
+    <string-array name="payment_method">
+        <item>Sin indicar</item>
+        <item>Efectivo</item>
+        <item>Tarjeta</item>
+
+    </string-array>
+    <string name="title_activity_config">ConfigActivity</string>
+
 </resources>
