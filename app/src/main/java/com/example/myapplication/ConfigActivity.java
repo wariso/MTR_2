@@ -37,6 +37,8 @@ public class ConfigActivity extends AppCompatActivity {
     private TextView txvAge;
     private Spinner spnPayment;
 
+    private boolean firstTimeOpened;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,10 +47,10 @@ public class ConfigActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         txvAge = (TextView) findViewById(R.id.txvAge);
-
         btnChange = (Button) findViewById(R.id.btnChange);
-
         spnPayment = (Spinner) findViewById(R.id.spnPayment);
+
+        firstTimeOpened = true;
 
         //https://developer.android.com/guide/topics/ui/controls/spinner#java
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -72,19 +74,33 @@ public class ConfigActivity extends AppCompatActivity {
         spnPayment.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Spinner spnPayment = (Spinner) findViewById(R.id.spnPayment);
-                String payment = spnPayment.getSelectedItem().toString();
 
-                SharedPreferences sh = PreferenceManager.getDefaultSharedPreferences(App.getcontext());
-                SharedPreferences.Editor edt = sh.edit();
+                if (!firstTimeOpened){
+                    Spinner spnPayment = (Spinner) findViewById(R.id.spnPayment);
+                    String payment = spnPayment.getSelectedItem().toString();
 
-                edt.putString("payment", payment);
+                    SharedPreferences sh = PreferenceManager.getDefaultSharedPreferences(App.getcontext());
+                    SharedPreferences.Editor edt = sh.edit();
 
-                if (edt.commit()){
-                    Toast.makeText(App.getcontext(), "Se logró guardar su método de pago", Toast.LENGTH_SHORT).show();
+                    edt.putString("payment", payment);
+
+                    if (edt.commit()){
+
+                        if (!payment.equals("Sin indicar")){
+                            Toast.makeText(App.getcontext(), "Se logró guardar su método de pago", Toast.LENGTH_SHORT).show();
+
+                        }else{
+                            Toast.makeText(App.getcontext(), "Método de pago no puede permanecer sin indicar", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }else{
+                        Toast.makeText(App.getcontext(), "No se logró guardar su método de pago", Toast.LENGTH_SHORT).show();
+
+                    }
 
                 }else{
-                    Toast.makeText(App.getcontext(), "No se logró guardar su método de pago", Toast.LENGTH_SHORT).show();
+                    firstTimeOpened = false;
 
                 }
             }
@@ -99,7 +115,7 @@ public class ConfigActivity extends AppCompatActivity {
         SharedPreferences sh;
         sh = PreferenceManager.getDefaultSharedPreferences(App.getcontext());
 
-        int age = sh.getInt("age", 3);
+        int age = sh.getInt("age", 0);
 
         if(age != 0){
             txvAge.setText(Integer.toString(age));
@@ -166,12 +182,12 @@ public class ConfigActivity extends AppCompatActivity {
                     }
 
                 }else{
-
                     Toast.makeText(App.getcontext(), "Edad ingresada fuera del rango permisible", Toast.LENGTH_SHORT).show();
 
                 }
             }
         });
+
         builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -182,5 +198,4 @@ public class ConfigActivity extends AppCompatActivity {
         builder.show();
 
     }
-
 }

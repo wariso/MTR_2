@@ -38,9 +38,12 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    //https://stackoverflow.com/questions/34525281/destroy-all-previous-activities-after-specific-activity-is-open/34525308
     public void openMainActivity(){
         Intent intent = new Intent(this, MainActivity.class);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+        //this.finish();
     }
 
 

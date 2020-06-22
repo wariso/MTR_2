@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.TextView;
@@ -70,7 +72,7 @@ public class QrActivity extends AppCompatActivity implements ZXingScannerView.Re
                         // check for permanent denial of any permission
                         if (report.isAnyPermissionPermanentlyDenied()) {
                             // permission is denied permenantly, navigate user to app settings
-                            showSettingsDialog(); //REVISARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR, es para mostrar una forma de cambiar los permisos
+                            //showSettingsDialog(); //REVISARRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR, es para mostrar una forma de cambiar los permisos
                         }
                     }
 
@@ -82,41 +84,7 @@ public class QrActivity extends AppCompatActivity implements ZXingScannerView.Re
                 .onSameThread()
                 .check();
 
-
-
-
-
-
-
-//                .withPermission(Manifest.permission.CAMERA)
-//                .withListener(new PermissionListener() {
-//
-//
-//
-//
-//                    @Override
-//                    public void onPermissionGranted(PermissionGrantedResponse response) {
-//                        scannerView.setResultHandler(QrActivity.this);
-//                        scannerView.startCamera();
-//                    }
-//
-//                    @Override
-//                    public void onPermissionDenied(PermissionDeniedResponse response) {
-//                        Toast.makeText(QrActivity.this, "You must accept this permission.", Toast.LENGTH_SHORT).show();
-//
-//                    }
-//
-//                    @Override
-//                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-//
-//                    }
-//                }).check();
-
     }
-
-
-
-
 
     @Override
     protected void onDestroy(){
@@ -133,7 +101,6 @@ public class QrActivity extends AppCompatActivity implements ZXingScannerView.Re
         Locale locale = new Locale("en", "UK");
 
         SimpleDateFormat timeFormat = new SimpleDateFormat("EEE,dd/MM/yyyy,HH:mm:ss", locale);
-        Toast.makeText(getApplicationContext(), timeFormat.format(currTime),Toast.LENGTH_SHORT).show();
 
         text += timeFormat.format(currTime) + ",";
 
@@ -145,17 +112,37 @@ public class QrActivity extends AppCompatActivity implements ZXingScannerView.Re
 
             text += lat + "," + lon + ",";
 
-            Toast.makeText(App.getcontext(), "Latitud: "+lat+" \n Longitud: "+lon,Toast.LENGTH_LONG).show();
-
         }else{
 
             text += "N/A,N/A,";
         }
 
-        text += rawResult.getText();
+        text += rawResult.getText() + ",";
+
+        SharedPreferences sh;
+        sh = PreferenceManager.getDefaultSharedPreferences(App.getcontext());
+
+        int age = sh.getInt("age", 0);
+
+        if(age != 0){
+            if(age < 65){
+                text += "No,";
+
+            }else{
+                text += "Si,";
+            }
+
+        }else{
+            text += "N/A,";
+
+        }
+
+        String payment = sh.getString("payment", "N/A");
+
+        text += payment;
 
         fm.appendToFile(Environment.getExternalStorageDirectory(), App.databaseFileName, text);
-        Toast.makeText(QrActivity.this, "Se logro agregar texto", Toast.LENGTH_SHORT).show();
+        Toast.makeText(QrActivity.this, "Gracias por su colaboración", Toast.LENGTH_SHORT).show();
         this.finish();
     }
 
@@ -192,11 +179,6 @@ public class QrActivity extends AppCompatActivity implements ZXingScannerView.Re
         Uri uri = Uri.fromParts("package", getPackageName(), null);
         intent.setData(uri);
         startActivityForResult(intent, 101);
+
     }
-
-
-
-
-
-
 }
