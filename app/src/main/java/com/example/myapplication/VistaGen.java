@@ -16,6 +16,7 @@ public class VistaGen extends AppCompatActivity {
 
         wv= (WebView) findViewById(R.id.webView);
         wv.setWebViewClient(new WebViewClient());
+        //comment
         wv.getSettings().setJavaScriptEnabled(true);
         wv.loadUrl(url);
     }
