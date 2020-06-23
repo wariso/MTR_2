@@ -33,6 +33,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
@@ -75,6 +77,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+    public void open(View view){
+
+        //Intent browserIntent=new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps/d/u/0/embed?mid=1pjCNv0fuLOHOiEUx5RAaN_Ti18HAFS83"));
+        //startActivity(browserIntent);
+        openVGActivity();
     }
 
     //https://www.youtube.com/watch?v=dvWrniwBJUw
@@ -204,6 +212,11 @@ public class MainActivity extends AppCompatActivity {
     //https://steemit.com/utopian-io/@fahrulhidayat/manage-permission-on-android-with-dexter-library
     public void openQRActivity(){
         Intent intent = new Intent(this, QrActivity.class);
+        startActivityForResult(intent, 100);
+
+    }
+    public void openVGActivity(){
+        Intent intent = new Intent(this, VistaGen.class);
         startActivityForResult(intent, 100);
 
     }
